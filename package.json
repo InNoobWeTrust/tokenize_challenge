@@ -1,7 +1,6 @@
 {
   "name": "tokenize_challenge",
   "version": "1.0.0",
-  "type": "module",
   "main": "functions/server.js",
   "scripts": {
     "build": "netlify-lambda build express",
