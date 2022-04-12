@@ -1,6 +1,90 @@
 <!DOCTYPE html>
+<head>
+  <!--<link rel="stylesheet" href="styles/styles.css">-->
+  <style>
+.container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+}
+
+.card {
+  padding: 1rem;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 0.5rem;
+}
+
+.header,.row {
+  color: gray;
+  display: flex;
+}
+
+.header.bid,.row.bid {
+  flex-direction: row;
+}
+
+.header.ask,.row.ask {
+  flex-direction: row-reverse;
+}
+
+.spacing {
+  flex: 1;
+  min-width: 4rem;
+}
+  </style>
+</head>
+<!--
 <object
   type="text/html"
   data="/.netlify/functions/server"
   style="width:100%;height:100%;"
 >
+-->
+
+<div class="container">
+<div id="bids"></div>
+<div id="asks"></div>
+</div>
+<!--<script type="module" src="scripts/main.js"></script>-->
+<script type="module">
+const Head = (isBid) => `
+<div class="header ${isBid ? "bid" : "ask"}">
+  <p class="size">Size</p>
+  <div class="spacing"></div>
+  <p class="bid-ask">${isBid ? "Bid" : "Ask"}</p>
+</div>
+`;
+
+const Row = (price, size, isBid) => `
+<div class="row ${isBid ? "bid" : "ask"}">
+  <p class="size">${size}</p>
+  <div class="spacing"></div>
+  <p class="price">${price}</p>
+</div>
+`;
+
+const Divider = () => `<hr>`;
+
+const Card = (isBid, marketData) => `
+<div class="card">
+${Head(isBid)}
+${Divider()}
+${marketData
+    .map(record => Row(record.price, record.size, isBid))
+    .join('\n')
+}
+</div>
+`;
+
+fetch('/.netlify/functions/server/market/10')
+  .then(async (res) => {
+    const {bids, asks} = await res.json();
+    const bidElem = document.getElementById('bids');
+    const askElem = document.getElementById('asks');
+
+    bidElem.innerHTML = Card(true, bids);
+    askElem.innerHTML = Card(false, asks);
+  });
+</script>
