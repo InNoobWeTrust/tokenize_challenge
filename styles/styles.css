@@ -1,0 +1,32 @@
+.container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+}
+
+.card {
+  padding: 1rem;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 0.5rem;
+}
+
+.header,.row {
+  color: gray;
+  display: flex;
+}
+
+.header.bid,.row.bid {
+  flex-direction: row;
+}
+
+.header.ask,.row.ask {
+  flex-direction: row-reverse;
+}
+
+.spacing {
+  flex: 1;
+}
+
+
