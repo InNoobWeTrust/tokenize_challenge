@@ -1,6 +1,7 @@
 {
   "name": "tokenize_challenge",
   "version": "1.0.0",
+  "type": "module",
   "main": "functions/server.js",
   "scripts": {
     "build": "netlify-lambda build express",
@@ -12,5 +13,8 @@
     "netlify-lambda": "^2.0.15",
     "nodemon": "^2.0.15",
     "serverless-http": "^3.0.1"
+  },
+  "dependencies": {
+    "node-fetch": "^3.2.3"
   }
 }
