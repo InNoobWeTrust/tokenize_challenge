@@ -5,13 +5,27 @@ Bookings request
 */
 
 import { bookApi } from './config.js';
-import fetch from 'node-fetch';
+import https from 'https';
+
+const fetch = (api) => new Promise((resolve, reject) => {
+    https.get(api, res => {
+        let body = '';
+        res.on('data', d => {
+            body += d;
+        });
+        res.on('end', () => {
+            resolve(JSON.parse(body));
+        });
+    }).on('error', error => {
+        reject(error);
+    });
+});
 
 const getBooks = async () => {
     const api = bookApi();
     // console.debug(api);
     const res = await fetch(api);
-    return await res.json();
+    return res;
 }
 
 const getBestBooks = async () => {
