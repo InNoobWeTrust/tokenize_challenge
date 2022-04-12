@@ -36,55 +36,59 @@
   </style>
 </head>
 <!--
-<object
+  <object
   type="text/html"
   data="/.netlify/functions/server"
   style="width:100%;height:100%;"
->
+  >
 -->
 
 <div class="container">
-<div id="bids"></div>
-<div id="asks"></div>
+  <div id="bids"></div>
+  <div id="asks"></div>
 </div>
 <!--<script type="module" src="scripts/main.js"></script>-->
 <script type="module">
-const Head = (isBid) => `
-<div class="header ${isBid ? "bid" : "ask"}">
-  <p class="size">Size</p>
-  <div class="spacing"></div>
-  <p class="bid-ask">${isBid ? "Bid" : "Ask"}</p>
-</div>
-`;
 
-const Row = (price, size, isBid) => `
-<div class="row ${isBid ? "bid" : "ask"}">
-  <p class="size">${size}</p>
-  <div class="spacing"></div>
-  <p class="price">${price}</p>
-</div>
-`;
+(() => {
+  const Head = (isBid) => `
+  <div class="header ${isBid ? "bid" : "ask"}">
+    <p class="size">Size</p>
+    <div class="spacing"></div>
+    <p class="bid-ask">${isBid ? "Bid" : "Ask"}</p>
+  </div>
+  `;
 
-const Divider = () => `<hr>`;
+  const Row = (price, size, isBid) => `
+  <div class="row ${isBid ? "bid" : "ask"}">
+    <p class="size">${size}</p>
+    <div class="spacing"></div>
+    <p class="price">${price}</p>
+  </div>
+  `;
 
-const Card = (isBid, marketData) => `
-<div class="card">
-${Head(isBid)}
-${Divider()}
-${marketData
-    .map(record => Row(record.price, record.size, isBid))
-    .join('\n')
-}
-</div>
-`;
+  const Divider = () => `<hr>`;
 
-fetch('/.netlify/functions/server/market/10')
-  .then(async (res) => {
-    const {bids, asks} = await res.json();
-    const bidElem = document.getElementById('bids');
-    const askElem = document.getElementById('asks');
+  const Card = (isBid, marketData) => `
+  <div class="card">
+  ${Head(isBid)}
+  ${Divider()}
+  ${marketData
+      .map(record => Row(record.price, record.size, isBid))
+      .join('\n')
+  }
+  </div>
+  `;
+  const updater = () => (fetch('/.netlify/functions/server/market/10')
+    .then(async (res) => {
+      const {bids, asks} = await res.json();
+      const bidElem = document.getElementById('bids');
+      const askElem = document.getElementById('asks');
 
-    bidElem.innerHTML = Card(true, bids);
-    askElem.innerHTML = Card(false, asks);
-  });
+      bidElem.innerHTML = Card(true, bids);
+      askElem.innerHTML = Card(false, asks);
+    }));
+
+    updater().then(() => setInterval(updater, 15000));
+})();
 </script>
