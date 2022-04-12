@@ -1,17 +1,12 @@
 'use strict';
-import express from 'express';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import serverless from 'serverless-http';
-import bodyParser from 'body-parser';
-
-import getBestBooks from './booking.js';
-import fuzzMarket from './fuzz.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+const express = require('express');
+const path = require('path');
+const serverless = require('serverless-http');
 const app = express();
+const bodyParser = require('body-parser');
+
+const getBestBooks = require('./booking');
+const fuzzMarket = require('./fuzz');
 
 // Router for lambda function
 const router = express.Router();
@@ -34,6 +29,6 @@ app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);  // path must route to lambda
 app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
 
-export default app;
-export const handler = serverless(app);
+module.exports = app;
+module.exports.handler = serverless(app);
 

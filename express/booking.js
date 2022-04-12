@@ -4,8 +4,8 @@ Bookings request
 =================================
 */
 
-import { bookApi } from './config.js';
-import https from 'https';
+const https = require('https');
+const bookApi = require('./config').bookApi;
 
 const fetch = (api) => new Promise((resolve, reject) => {
     https.get(api, res => {
@@ -39,4 +39,4 @@ const getBestBooks = async () => {
     return bookTable;
 }
 
-export default getBestBooks;
+module.exports = getBestBooks;

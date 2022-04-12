@@ -3,10 +3,17 @@
 Config
 =================================
 */
-export const API_BASE = 'https://api.binance.com/api/v3/';
-export const API_ROUTES = {
+const API_BASE = 'https://api.binance.com/api/v3/';
+const API_ROUTES = {
   books: (symbol) => `ticker/bookTicker${symbol ? `?symbol=${symbol}` : ''}`,
 }
-export const DEFAULT_TOKEN = 'ETHBTC';
+const DEFAULT_TOKEN = 'ETHBTC';
 
-export const bookApi = () => `${API_BASE}${API_ROUTES.books(DEFAULT_TOKEN)}`;
+const bookApi = () => `${API_BASE}${API_ROUTES.books(DEFAULT_TOKEN)}`;
+
+module.exports = {
+  API_BASE,
+  API_ROUTES,
+  DEFAULT_TOKEN,
+  bookApi,
+};

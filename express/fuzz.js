@@ -63,4 +63,4 @@ const fuzzMarket = (low, high, num) => {
   });
 }
 
-export default fuzzMarket;
+module.exports = fuzzMarket;
