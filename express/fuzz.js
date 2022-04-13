@@ -40,9 +40,10 @@ const fuzzSizes = (num) => {
   return sizes;
 }
 
-const fuzzOrders = (low, high, num) => {
+const fuzzOrders = (low, high, num, adjust) => {
   const prices = fuzzPrices(low, high, num);
-  const sizes = fuzzSizes(num);
+  const originalSizes = fuzzSizes(num);
+  const sizes = adjust(prices, originalSizes);
   const orders = prices.map((p, idx) => ({
     price: p,
     size: sizes[idx],
@@ -50,13 +51,33 @@ const fuzzOrders = (low, high, num) => {
   return orders;
 }
 
+const askSizeAdjust = (prices, sizes) => {
+  const total = sizes.reduce((prev, curr) => prev + curr);
+  if  (total < 150) return sizes;
+  const adjustment = 150 / total;
+  return sizes.map(item => item * adjustment);
+}
+
+const bidSizeAdjust = (prices, sizes) => {
+  const totalVolume = sizes.reduce((prev, curr, idx) => {
+    const nextVolume = curr * prices[idx];
+    return prev + nextVolume;
+  }, 0);
+
+  if (totalVolume < 5) return sizes;
+  const avgPrice = prices.reduce((prev, curr) => prev + curr) / prices.length;
+  const totalSize = sizes.reduce((prev, curr) => prev + curr);
+  const adjustment = 5 / totalVolume / avgPrice;
+  return sizes.map(item => item * adjustment);
+}
+
 const fuzzMarket = (low, high, num) => {
   const gap = fuzzGap(low, high);
   const middle = low + (high - low) / 2;
   const bidRange = [middle - gap, low]; // Direction: higher -> lower
   const askRange = [middle + gap, high]; // Direction: lower -> higher
-  const bids = fuzzOrders(...bidRange, num);
-  const asks = fuzzOrders(...askRange, num);
+  const bids = fuzzOrders(...bidRange, num, bidSizeAdjust);
+  const asks = fuzzOrders(...askRange, num, askSizeAdjust);
   return ({
     bids,
     asks,
