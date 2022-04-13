@@ -8,9 +8,9 @@ const Head = (isBid) => `
 
 const Row = (price, size, isBid) => `
 <div class="row ${isBid ? "bid" : "ask"}">
-  <p class="size">${size}</p>
+  <p class="size">${size.toFixed(12)}</p>
   <div class="spacing"></div>
-  <p class="price">${price}</p>
+  <p class="price">${price.toFixed(12)}</p>
 </div>
 `;
 
