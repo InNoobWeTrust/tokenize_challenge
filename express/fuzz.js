@@ -3,7 +3,7 @@
 Orders fuzz
 =================================
 */
-const fuzzGap = () => 1e-4 * (1 + Math.random());
+const fuzzGap = (low, high) => (high - low) * 0.1 * (1 + Math.random());
 
 const fuzzSize = () => Math.random() >= 0.5 ? (10 * Math.random() + Math.random()) : Math.random();
 
@@ -51,10 +51,10 @@ const fuzzOrders = (low, high, num) => {
 }
 
 const fuzzMarket = (low, high, num) => {
-  const gap = fuzzGap();
-  const middle = (high - low) / 2;
-  const bidRange = [low, middle - gap];
-  const askRange = [middle + gap, high];
+  const gap = fuzzGap(low, high);
+  const middle = low + (high - low) / 2;
+  const bidRange = [middle - gap, low]; // Direction: higher -> lower
+  const askRange = [middle + gap, high]; // Direction: lower -> higher
   const bids = fuzzOrders(...bidRange, num);
   const asks = fuzzOrders(...askRange, num);
   return ({
