@@ -24,6 +24,20 @@ ${marketData
     .map(record => Row(record.price, record.size, isBid))
     .join('\n')
 }
+${Divider()}
+${isBid ? BidInfo(marketData) : AskInfo(marketData)}
+</div>
+`;
+
+const BidInfo = (marketData) => `
+<div class="meta bid">
+  <p>Total bid volume: ${marketData.reduce((prev, curr) => prev + curr.price * curr.size, 0)}</p>
+</div>
+`;
+
+const AskInfo = (marketData) => `
+<div class="meta ask">
+  <p>Total ask size: ${marketData.map(record => record.size).reduce((prev, curr) => prev + curr)}</p>
 </div>
 `;
 
