@@ -66,7 +66,6 @@ const bidSizeAdjust = (prices, sizes) => {
 
   if (totalVolume < 5) return sizes;
   const avgPrice = prices.reduce((prev, curr) => prev + curr) / prices.length;
-  const totalSize = sizes.reduce((prev, curr) => prev + curr);
   const adjustment = 5 / totalVolume / avgPrice;
   return sizes.map(item => item * adjustment);
 }
