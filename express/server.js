@@ -36,8 +36,8 @@ router.get('/market/:num', async (req, res) => {
 
 app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);
-app.use('/', (_req, res) => res.sendFile(path.join(__dirname, '../static/index.html')));
-app.use('', express.static(path.join(__dirname, 'static')));
+//app.use('/', (_req, res) => res.sendFile(path.join(__dirname, '../static/index.html')));
+app.use('', express.static('static'));
 
 module.exports = app;
 module.exports.handler = serverless(app);
